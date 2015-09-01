@@ -44,12 +44,16 @@ var keyboard = new Keyboard();
 
 var player = new Player();
 
+
 function run()
 {
 	context.fillStyle = "#ccc";		
 	context.fillRect(0, 0, canvas.width, canvas.height);
 	
 	var deltaTime = getDeltaTime();
+	
+	
+	drawMap();
 	
 	player.draw();
 	player.update(deltaTime);
