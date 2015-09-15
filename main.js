@@ -4,6 +4,36 @@ var context = canvas.getContext("2d");
 var startFrameMillis = Date.now();
 var endFrameMillis = Date.now();
 
+// Collision array.
+var cells = [];
+
+function initialise() {
+	for (var layerIdx = 0; layerIdx < LAYER_COUNT; layerIdx++) {
+		cells[layerIdx] = [];
+		var idx = 0;
+		
+		for (var y = 0; y < level.layers[layerIdx].height; y++) {
+			cells[layerIdx][y] = [];
+			
+			for (var x = 0; x < level.layers[layerIdx].width; x++) {
+				if (level.layers[layerIdx].data[idx] != 0)
+				{
+					cells[layerIdx][y][x] = 1;
+					cells[layerIdx][y - 1][x] = 1;
+					cells[layerIdx][y - 1][x + 1] = 1;
+					cells[layerIdx][y][x + 1] = 1;
+					
+					
+					
+				} else if (cells[layerIdx][y][x] != 1) {
+					cells[layerIdx][y][x] = 0;
+				}
+				idx++;
+			}
+		}
+	}
+}
+
 // This function will return the time in seconds since the function 
 // was last called
 // You should only call this function once per frame
@@ -39,6 +69,22 @@ var SCREEN_HEIGHT = canvas.height;
 var fps = 0;
 var fpsCount = 0;
 var fpsTime = 0;
+
+var METER = TILE;
+
+// real life is 9.8 / per second
+var GRAVITY = METER * 6.3 * 2;
+
+var MAXDX = METER * 10;
+var MAXDY = METER * 15;
+
+var ACCEL = MAXDX * 2;
+
+var FRICTION = MAXDX * 6;
+
+var JUMP = METER * 1500;
+
+initialise();
 
 var keyboard = new Keyboard();
 
