@@ -91,6 +91,33 @@ var keyboard = new Keyboard();
 var player = new Player();
 
 
+var musicBackground; 
+var sfxFire;  
+
+
+function initialize() {         
+	musicBackground = new Howl(   {   
+		urls: ["background.ogg"],    
+		loop: true,   
+		buffer: true,   
+		volume: 0.5  
+	} );  
+
+	musicBackground.play();    
+
+	sfxFire = new Howl(    {    
+		urls: ["fireEffect.ogg"],    
+		buffer: true,    
+		volume: 1,    
+		onend: function() {     
+			isSfxPlaying = false;    
+		}   
+	} ); 
+}
+
+var cam_x = 0;
+var cam_y = 0;
+
 function run()
 {
 	context.fillStyle = "#ccc";		
@@ -99,11 +126,15 @@ function run()
 	var deltaTime = getDeltaTime();
 	
 	
-	drawMap();
-	
-	player.draw();
 	player.update(deltaTime);
+	
+	cam_x = bound(player.x - canvas.width / 2, 0, MAP.tw * TILE - canvas.width);
+	cam_y = bound(player.y - canvas.height / 2, 0, MAP.th * TILE - canvas.height);
 		
+	drawMap(cam_x, cam_y);
+	player.draw(cam_x, cam_y);
+	
+	
 	// update the frame counter 
 	fpsTime += deltaTime;
 	fpsCount++;

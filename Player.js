@@ -1,6 +1,57 @@
+
+var LEFT = 0;
+var RIGHT = 1;
+
+var ANIM_IDLE_LEFT = 0;
+var ANIM_JUMP_LEFT = 1;
+var ANIM_WALK_LEFT = 2;
+var ANIM_IDLE_RIGHT = 3;
+var ANIM_JUMP_RIGHT = 4;
+var ANIM_WALK_RIGHT = 5;
+var ANIM_SHOOT_LEFT = 6;
+var ANIM_SHOOT_RIGHT = 7;
+var ANIM_MAX = 8;
+
+var heart = new function() {
+	this.image = document.createElement("img");
+	this.image.src = "heart.png";
+}
+
 var Player = function() {
-		this.image = document.createElement("img");
-		this.image.src = "hero.png";
+	
+		this.sprite = new Sprite("ChuckNorris.png");
+		
+		// Idle Left
+		this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [0, 1, 2, 3, 4, 5, 6, 7]);
+		
+		// Jump Left
+		this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [8, 9, 10, 11, 12]);
+		
+		// Walk Left
+		this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ,24, 25]);
+		
+		// Idle Right
+		this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [52, 53, 54, 55, 56, 57, 58, 59]);
+		
+		// Jump Right
+		this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [60, 61, 62, 63, 64]);
+		
+		// Walk Right
+		this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78]);
+		
+		// Shoot Left
+		this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41]);
+		
+		// Shoot Right
+		this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93]);
+		
+		
+		//offset
+		for (var i = 0; i < ANIM_MAX; i++) {
+			this.sprite.setAnimationOffset(i, -55, -87);
+		}
+		
+		this.direction = LEFT;
 		
 		this.x = 9 * TILE;
 		this.y = 0 * TILE;
@@ -15,27 +66,137 @@ var Player = function() {
 		this.jumping = false;
 		
 		this.rotation = 0;
+		this.cooldownTimer = 0; 
 		
-}
+		this.lives = 3;
+		
+		var self = this;
+		
+		this.jump_sfx_isPlaying = false;
+		this.jump_sfx = new Howl( {
+			urls: ["fireEffect.ogg"],
+			buffer: true,
+			volume : 1,
+			onend : function() {
+				self.jump_sfx_isPlaying = false;
+			}
+		});
+		
+		
+
+		this.bullets = [];
+		this.cur_bullet_index = 0;
+		this.max_bullets = 50;
+		
+		for (var i = 0; i < this.max_bullets; i++) {
+			this.bullets[i] = new Bullet() 
+		}
+		
+		this.shoot_timer = 0.2;
+		this.shoot_cooldown = 0.0;
+		
+	}
 
 
 Player.prototype.update = function(dt) {
 	
+	this.sprite.update(dt);
+	
 	var left = false;
 	var right = false;
 	var jump = false;
+	var shooting = false;
+	
+	
+	if (keyboard.isKeyDown(keyboard.KEY_UP) == true) {   
+		jump = true;  
+	}  
+	
+	if (this.cooldownTimer > 0) {   
+		this.cooldownTimer -= dt;  
+	}  
+	
+	if (keyboard.isKeyDown(keyboard.KEY_SPACE) == true && this.cooldownTimer <= 0) {   
+		this.jump_sfx.play();
+		this.cooldownTimer = 0.3;      
+		// Shoot a bullet  
+	} 
 	
 	if (keyboard.isKeyDown(keyboard.KEY_LEFT)) 
 	{
 		left = true;
+		this.direction = LEFT;
+		if (this.sprite.currentAnimation != ANIM_WALK_LEFT) {
+			this.sprite.setAnimation(ANIM_WALK_LEFT);
+		}
 	}
 	
-	if (keyboard.isKeyDown(keyboard.KEY_RIGHT)) {
+	else if (keyboard.isKeyDown(keyboard.KEY_RIGHT)) {
 		right = true;
+		this.direction = RIGHT;
+		if (this.sprite.currentAnimation != ANIM_WALK_RIGHT) {
+			this.sprite.setAnimation(ANIM_WALK_RIGHT);
+		}
+	} else {
+		
+		if (!this.jumping && !this.falling) {
+			
+			if (this.direction == LEFT) {
+				if (this.sprite.currentAnimation != ANIM_IDLE_LEFT 
+				&& !this.jumping) 
+					this.sprite.setAnimation(ANIM_IDLE_LEFT);
+				
+			} else {
+				if (this.sprite.currentAnimation != ANIM_IDLE_RIGHT 
+				&& !this.jumping) 
+					this.sprite.setAnimation(ANIM_IDLE_RIGHT);
+			}
+		}
+		
 	}
-	
+	if (keyboard.isKeyDown(keyboard.KEY_SHIFT)) {
+		shooting = true;
+		
+		if (left) 
+			this.sprite.setAnimation(ANIM_SHOOT_LEFT);
+		if (right)
+			this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
+	}
 	if (keyboard.isKeyDown(keyboard.KEY_SPACE)) {
 		jump = true;
+		
+		if (left) 
+			this.sprite.setAnimation(ANIM_JUMP_LEFT);
+		
+		if (right) 
+			this.sprite.setAnimation(ANIM_JUMP_RIGHT);
+		
+	}
+	
+	if (keyboard.isKeyDown(keyboard.KEY_SHIFT)) {
+		if (this.shoot_cooldown <= 0.0) {
+				
+				var jitter = Math.random() * 0.2 - 0.1;
+				
+				if (this.direction == LEFT) 
+					this.bullets[this.cur_bullet_index].fire(this.x, this.y, -1, jitter);
+				else
+					this.bullets[this.cur_bullet_index].fire(this.x, this.y, 1, jitter);
+				
+				this.shoot_cooldown = this.shoot_timer;
+				
+				this.cur_bullet_index++;
+				
+				if (this.cur_bullet_index >= this.max_bullets)
+					this.cur_bullet_index = 0;
+		}
+	}
+	// Cool down the bullets
+	if (this.shoot_cooldown > 0.0) 
+		this.shoot_cooldown -= dt;
+	// Update the bullets
+	for (var i = 0; i < this.max_bullets; i++) {
+		this.bullets[i].update(dt);
 	}
 	
 	var wasleft = (this.velocity_x < 0);
@@ -59,6 +220,11 @@ Player.prototype.update = function(dt) {
 	if (jump && !this.jumping && !falling) {
 		ddy = ddy - JUMP;
 		this.jumping = true;
+		
+		if (this.direction == LEFT)
+			this.sprite.setAnimation(ANIM_JUMP_LEFT);
+		else 
+			this.sprite.setAnimation(ANIM_JUMP_RIGHT);
 	}
 	
 	this.x = Math.floor(this.x + (dt * this.velocity_x));
@@ -101,10 +267,10 @@ Player.prototype.update = function(dt) {
 			cell = cellDown;
 			cellRight = cellDiag;
 			ny = 0;
-		}
+ 		}
 	}
 	
-	if (this                  .velocity_x > 0) {
+	if (this.velocity_x > 0) {
 		if ((cellRight && !cell) || (cellDiag && !cellDown && ny)) {
 			this.x = tileToPixel(tx);
 			this.velocity_x = 0;
@@ -116,11 +282,33 @@ Player.prototype.update = function(dt) {
 		}
 	}}
 
-Player.prototype.draw = function() {
-	context.save();
-	context.translate(this.x, this.y);
-	context.rotate(this.rotation);
-	context.drawImage(this.image, -this.image.width / 2, -this.image.height / 2);
-	context.restore();
+Player.prototype.drawHeart = function(context, x, y) {
+		context.save();
+		context.translate(x, y);
+		context.drawImage(heart.image, -heart.image.width / 50, -heart.image.height / 50); 
+		context.restore();
+}
+
+Player.prototype.draw = function(cam_x, cam_y) {
+	this.sprite.draw(context, this.x - cam_x, this.y - cam_y); 
+	
+	
+	for (var i = 0; i < this.max_bullets; i++) {
+		this.bullets[i].draw(cam_x, cam_y);
+	}
+	
+	
+	var previousX = 30;
+	
+	for (var i = 0; i < this.lives; i++) {
+		
+		if (i > 0) {
+			player.drawHeart(context, previousX + 20, 30);
+			previousX += 20;
+		}
+		else
+		player.drawHeart(context, 30, 30);
+
+	}
 }
 
