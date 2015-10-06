@@ -108,7 +108,11 @@ function drawMap(cam_x, cam_y) {
 				var sx = TILESET_PADDING + (tileIndex % TILESET_COUNT_X) *  (TILESET_TILE + TILESET_SPACING);        
 				var sy = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_Y)) *  (TILESET_TILE + TILESET_SPACING);        
 				
+<<<<<<< HEAD
 				context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE,  x *TILE - cam_x, (y-1)*TILE - cam_y, TILESET_TILE, TILESET_TILE);     
+=======
+				context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE,  (x-1)*TILE - cam_x, (y-1)*TILE - cam_y, TILESET_TILE, TILESET_TILE);     
+>>>>>>> origin/master
 			}     
 			idx++; 
 		}     
