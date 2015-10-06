@@ -88,35 +88,32 @@ var TILESET_COUNT_Y = 14;
 var tileset = document.createElement("img");
 tileset.src = level.tilesets[0].image;
 
-function drawMap() {
+function drawMap(cam_x, cam_y) {
+	
+	
+	
 	//loop through horizontally all of our tiles.
 	//loop through all of our layers
-	for (var layer = 0; layer < LAYER_COUNT; layer++) 
-	{
-
-		var idx = 0;
-		
-		//loop through vertically all of our tileset
-		for (var y = 0; y < level.layers[layer].height; y++) 
-		{
-			for (var x = 0; x < level.layers[layer].width; x++) 
-			{
-				if (level.layers[layer].data[idx] != 0) 
-				{
-					var tileIndex = level.layers[layer].data[idx] - 1;  
-					var sx = TILESET_PADDING + (tileIndex % TILESET_COUNT_X) * (TILESET_TILE + TILESET_SPACING);
-					
-					var sy = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_Y) * (TILESET_TILE + TILESET_SPACING));
-					
-					context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE, x * TILE, (y - 1) * TILE, TILESET_TILE, TILESET_TILE);	
-				}
+	
+	for (var layerIdx=0; layerIdx < LAYER_COUNT; layerIdx++ ) {    
+			var idx = 0;    
+		for(var y = 0; y < level.layers[layerIdx].height;  y++ ) {  
+			for (var x = 0; x < level.layers[layerIdx].width;  x++) {     
+				if (level.layers[layerIdx].data[idx] != 0) {        
+				// the tiles in the Tiled map are base 1 (meaning a value of 0 means no tile),           
+				// so subtract one from the tileset id to get the        
+				// correct tile        
 				
-				idx++;
-			}
-			
-		}
-		
-	}
+				var tileIndex = level.layers[layerIdx].data[idx] - 1;        
+				var sx = TILESET_PADDING + (tileIndex % TILESET_COUNT_X) *  (TILESET_TILE + TILESET_SPACING);        
+				var sy = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_Y)) *  (TILESET_TILE + TILESET_SPACING);        
+				
+				context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE,  x *TILE - cam_x, (y-1)*TILE - cam_y, TILESET_TILE, TILESET_TILE);     
+			}     
+			idx++; 
+		}     
+	}    
+}
 }
 	
 	

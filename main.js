@@ -82,7 +82,7 @@ var ACCEL = MAXDX * 2;
 
 var FRICTION = MAXDX * 6;
 
-var JUMP = METER * 1500;
+var JUMP = METER * 600;
 
 initialise();
 
@@ -91,19 +91,68 @@ var keyboard = new Keyboard();
 var player = new Player();
 
 
+var musicBackground; 
+var sfxFire;  
+
+
+function initialize() {         
+	musicBackground = new Howl(   {   
+		urls: ["Song.mp3"],    
+		loop: true,   
+		buffer: true,   
+		volume: 2,  
+	} );  
+
+	musicBackground.play();    
+
+	sfxFire = new Howl(    {    
+		urls: ["fireEffect.ogg"],    
+		buffer: true,    
+		volume: 1,    
+		onend: function() {     
+			isSfxPlaying = false;    
+		}   
+	} ); 
+}
+
+musicBackground = new Howl(   {   
+		urls: ["Song.mp3"],    //  Song From - http://ericskiff.com/music/ 
+		loop: true,   
+		buffer: true,   
+		volume: 0.5, 
+		isPlaying : false,
+		onend: function() {
+			isPlaying = true;
+			musicBackground.play();
+		}
+	} );
+
+
+	musicBackground.play(); 
+	
+var cam_x = 0;
+var cam_y = 0;
+
 function run()
 {
+	
 	context.fillStyle = "#ccc";		
 	context.fillRect(0, 0, canvas.width, canvas.height);
 	
 	var deltaTime = getDeltaTime();
 	
 	
-	drawMap();
-	
-	player.draw();
 	player.update(deltaTime);
+	
+	cam_x = bound(player.x - canvas.width / 2, 0, MAP.tw * TILE - canvas.width);
+	cam_y = bound(player.y - canvas.height / 2, 0, MAP.th * TILE - canvas.height);
 		
+
+	
+	
+	drawMap(cam_x, cam_y);
+	player.draw(cam_x, cam_y);
+
 	// update the frame counter 
 	fpsTime += deltaTime;
 	fpsCount++;
@@ -113,11 +162,12 @@ function run()
 		fps = fpsCount;
 		fpsCount = 0;
 	}		
-		
+	
+	
 	// draw the FPS
-	context.fillStyle = "#f00";
-	context.font="14px Arial";
-	context.fillText("FPS: " + fps, 5, 20, 100);
+	//context.fillStyle = "#f00";
+	//context.font="14px Arial";
+	//context.fillText("FPS: " + fps, 5, 20, 100);
 }
 
 
