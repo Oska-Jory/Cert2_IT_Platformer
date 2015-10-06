@@ -1,8 +1,8 @@
-<<<<<<< HEAD
-var BULLET_SPEED = 500;
-=======
+//<<<<<<< HEAD
 var BULLET_SPEED = 100;
->>>>>>> origin/master
+//=======
+//var BULLET_SPEED = 100;
+//>>>>>>> origin/master
 
 var Bullet = function() {
  this.image = document.createElement("img");

@@ -96,21 +96,21 @@ var sfxFire;
 
 
 function initialize() {         
-	musicBackground = new Howl(   {   
-<<<<<<< HEAD
-		urls: ["Song.mp3"],    
-		loop: true,   
-		buffer: true,   
-		volume: 2,  
-=======
-		urls: ["background.ogg"],    
-		loop: true,   
-		buffer: true,   
-		volume: 0.5  
->>>>>>> origin/master
-	} );  
-
-	musicBackground.play();    
+//musicBackground = new Howl(   {   
+//<<<<< HEAD
+//	urls: ["Song.mp3"],    
+//	loop: true,   
+//	buffer: true,   
+//	volume: 2,  
+//=====
+//	urls: ["background.ogg"],    
+//	loop: true,   
+//	buffer: true,   
+//	volume: 0.5  
+//>>>>> origin/master
+//} );  
+//
+//musicBackground.play();    
 
 	sfxFire = new Howl(    {    
 		urls: ["fireEffect.ogg"],    
@@ -122,7 +122,7 @@ function initialize() {
 	} ); 
 }
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 musicBackground = new Howl(   {   
 		urls: ["Song.mp3"],    //  Song From - http://ericskiff.com/music/ 
 		loop: true,   
@@ -138,8 +138,8 @@ musicBackground = new Howl(   {
 
 	musicBackground.play(); 
 	
-=======
->>>>>>> origin/master
+//=======
+//>>>>>>> origin/master
 var cam_x = 0;
 var cam_y = 0;
 
@@ -157,19 +157,19 @@ function run()
 	cam_x = bound(player.x - canvas.width / 2, 0, MAP.tw * TILE - canvas.width);
 	cam_y = bound(player.y - canvas.height / 2, 0, MAP.th * TILE - canvas.height);
 		
-<<<<<<< HEAD
+//<<<<<<< HEAD
 
 	
 	
 	drawMap(cam_x, cam_y);
 	player.draw(cam_x, cam_y);
 
-=======
-	drawMap(cam_x, cam_y);
-	player.draw(cam_x, cam_y);
+///=======
+	//drawMap(cam_x, cam_y);
+	//player.draw(cam_x, cam_y);
 	
 	
->>>>>>> origin/master
+//>>>>>>> origin/master
 	// update the frame counter 
 	fpsTime += deltaTime;
 	fpsCount++;

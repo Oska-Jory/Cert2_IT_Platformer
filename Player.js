@@ -39,21 +39,21 @@ var Player = function() {
 		// Walk Right
 		this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78]);
 		
-<<<<<<< HEAD
+//<<<<<<< HEAD
 		//shoot left
 		this.sprite.buildAnimation(12, 8, 165, 126, 0.05, 		
 							[27,28,29,30,31,32,33,34,35,36, 37, 38]);
 		//shoot right
 		this.sprite.buildAnimation(12,8, 165, 126, 0.05,
 							[79,80,81,82,83,84,85,86,87,88,89,90,91,92]);
-=======
+//=======
 		// Shoot Left
-		this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41]);
+		//this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41]);
 		
 		// Shoot Right
-		this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93]);
+	//	this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93]);
 		
->>>>>>> origin/master
+//>>>>>>> origin/master
 		
 		//offset
 		for (var i = 0; i < ANIM_MAX; i++) {
@@ -77,7 +77,7 @@ var Player = function() {
 		
 		this.rotation = 0;
 		this.cooldownTimer = 0; 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 		
 		this.state = 1;
 		
@@ -100,11 +100,11 @@ var Player = function() {
 		});
 		
 		
-=======
+//=======
 		
-		this.lives = 3;
+		//this.lives = 3;
 		
-		var self = this;
+		//var self = this;
 		
 		this.jump_sfx_isPlaying = false;
 		this.jump_sfx = new Howl( {
@@ -130,20 +130,20 @@ var Player = function() {
 		this.shoot_cooldown = 0.0;
 		
 	}
->>>>>>> origin/master
-
-		this.bullets = [];
-		this.cur_bullet_index = 0;
-		this.max_bullets = 50;
-		
-		for (var i = 0; i < this.max_bullets; i++) {
-			this.bullets[i] = new Bullet() 
-		}
-		
-		this.shoot_timer = 0.2;
-		this.shoot_cooldown = 0.0;
-		
-	}
+//>>>>>>> origin/master
+//
+//		this.bullets = [];
+//		this.cur_bullet_index = 0;
+//		this.max_bullets = 50;
+//		
+//		for (var i = 0; i < this.max_bullets; i++) {
+//			this.bullets[i] = new Bullet() 
+//		}
+//		
+//		this.shoot_timer = 0.2;
+//		this.shoot_cooldown = 0.0;
+//		
+//	}
 
 	var left = false;
 	var right = false;
@@ -157,7 +157,7 @@ Player.prototype.update = function(dt) {
 	var jump = false;
 	var shooting = false;
 	
-<<<<<<< HEAD
+//<<<<<<< HEAD
 if (this.state == 3 || this.state == 1 || this.state == 2) {
 		if (keyboard.isKeyDown(keyboard.KEY_SPACE)) {
 			this.state = 0;
@@ -191,8 +191,8 @@ if (this.state == 3 || this.state == 1 || this.state == 2) {
 		this.state = 2;
 		return;
 	}
-=======
->>>>>>> origin/master
+//=======
+//>>>>>>> origin/master
 	
 	if (keyboard.isKeyDown(keyboard.KEY_UP) == true) {   
 		jump = true;  
@@ -202,19 +202,14 @@ if (this.state == 3 || this.state == 1 || this.state == 2) {
 		this.cooldownTimer -= dt;  
 	}  
 	
-<<<<<<< HEAD
+//<<<<<<< HEAD
 	//if (keyboard.isKeyDown(keyboard.KEY_SPACE) == true && this.cooldownTimer <= 0) {   
 	//	//this.jump_sfx.play();
 	//	this.cooldownTimer = 0.3;      
 	//	// Shoot a bullet  
 	//} 
-=======
-	if (keyboard.isKeyDown(keyboard.KEY_SPACE) == true && this.cooldownTimer <= 0) {   
-		this.jump_sfx.play();
-		this.cooldownTimer = 0.3;      
-		// Shoot a bullet  
-	} 
->>>>>>> origin/master
+//=======
+	
 	
 	if (keyboard.isKeyDown(keyboard.KEY_LEFT)) 
 	{
@@ -228,13 +223,13 @@ if (this.state == 3 || this.state == 1 || this.state == 2) {
 	}
 	
 	else if (keyboard.isKeyDown(keyboard.KEY_RIGHT)) {
-<<<<<<< HEAD
+//<<<<<<< HEAD
 		this.left = false;
 		right = true;
 		left = false;
-=======
-		right = true;
->>>>>>> origin/master
+//=======
+		//right = true;
+//>>>>>>> origin/master
 		this.direction = RIGHT;
 		if (this.sprite.currentAnimation != ANIM_WALK_RIGHT) {
 			this.sprite.setAnimation(ANIM_WALK_RIGHT);
@@ -257,7 +252,7 @@ if (this.state == 3 || this.state == 1 || this.state == 2) {
 		
 	}
 	if (keyboard.isKeyDown(keyboard.KEY_SHIFT)) {
-<<<<<<< HEAD
+//<<<<<<< HEAD
 		
 			this.shooting = true;
 		if (this.direction == LEFT)
@@ -295,30 +290,30 @@ if (this.state == 3 || this.state == 1 || this.state == 2) {
 	// Update the bullets
 	for (var i = 0; i < this.max_bullets; i++) {
 		this.bullets[i].update(dt);
-=======
-		shooting = true;
+//=======
+	//	shooting = true;
 		
-		if (left) 
-			this.sprite.setAnimation(ANIM_SHOOT_LEFT);
-		if (right)
-			this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
->>>>>>> origin/master
+	//	if (left) 
+	//		this.sprite.setAnimation(ANIM_SHOOT_LEFT);
+		//if (right)
+	//		this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
+//>>>>>>> origin/master
 	}
 	if (keyboard.isKeyDown(keyboard.KEY_SPACE)) {
 		jump = true;
-<<<<<<< HEAD
+//<//<<<<<< HEAD
 			
-=======
+//=======
 		
->>>>>>> origin/master
+//>>>>>>> origin/master
 		if (left) 
 			this.sprite.setAnimation(ANIM_JUMP_LEFT);
 		
 		if (right) 
 			this.sprite.setAnimation(ANIM_JUMP_RIGHT);
 		
-<<<<<<< HEAD
-=======
+//<<<<<<< HEAD
+//=======
 	}
 	
 	if (keyboard.isKeyDown(keyboard.KEY_SHIFT)) {
@@ -345,7 +340,7 @@ if (this.state == 3 || this.state == 1 || this.state == 2) {
 	// Update the bullets
 	for (var i = 0; i < this.max_bullets; i++) {
 		this.bullets[i].update(dt);
->>>>>>> origin/master
+//>>>>>>> origin/master
 	}
 	
 
@@ -441,7 +436,7 @@ Player.prototype.drawHeart = function(context, x, y) {
 }
 
 Player.prototype.draw = function(cam_x, cam_y) {
-<<<<<<< HEAD
+//<<<<<<< HEAD
 	
 	if (this.state == 3) {
 		context.fillStyle = "#f00";
@@ -484,11 +479,11 @@ Player.prototype.draw = function(cam_x, cam_y) {
 	
 	
 	
-=======
-	this.sprite.draw(context, this.x - cam_x, this.y - cam_y); 
+//=======
+	//this.sprite.draw(context, this.x - cam_x, this.y - cam_y); 
 	
 	
->>>>>>> origin/master
+//>//>>>>>> origin/master
 	for (var i = 0; i < this.max_bullets; i++) {
 		this.bullets[i].draw(cam_x, cam_y);
 	}
@@ -499,21 +494,21 @@ Player.prototype.draw = function(cam_x, cam_y) {
 	for (var i = 0; i < this.lives; i++) {
 		
 		if (i > 0) {
-<<<<<<< HEAD
+//<<<<<<< HEAD
 			player.drawHeart(context, previousX + 30, 30);
 			previousX += 30;
 		}
 		else
 		player.drawHeart(context, 30, 30);
     
-=======
-			player.drawHeart(context, previousX + 20, 30);
-			previousX += 20;
-		}
-		else
-		player.drawHeart(context, 30, 30);
+//=======
+		//	player.drawHeart(context, previousX + 20, 30);
+			//previousX += 20;
+	//	}
+	//	else
+	//	player.drawHeart(context, 30, 30);
 
->>>>>>> origin/master
+//>>>>>>> origin/master
 	}
 }
 
